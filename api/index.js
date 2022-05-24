@@ -7,6 +7,7 @@ var https = require("https");
 //引入leancloud
 const AV = require('leancloud-storage');
 const {Query, User} = AV;
+//环境变量
 if (process.env.appId && process.env.appKey) {
     AV.init({
         appId: process.env.appId, appKey: process.env.appKey
