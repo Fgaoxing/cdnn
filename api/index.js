@@ -169,7 +169,7 @@ http.createServer(function (req, res) {
                             res.end();
                         } else {
                             res.writeHead(200, {
-                                'Content-Type': 'text/plain'
+                                'Content-Type': 'text/html'
                             });
                             res.write(data);
                             res.end();
