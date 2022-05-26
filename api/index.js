@@ -178,11 +178,9 @@ http.createServer(function (req, res) {
                     if (path.split('.').length > 1) {
                         var ext = path.split('.')[path.split('.').length - 1];
                         if (ext === 'png' || ext === 'jpg' || ext === 'jpeg' || ext === 'gif') {
-                            res.writeHead(200, {
-                                'Content-Type': 'image/' + ext
-                            });
-                            res.write(data);
-                            res.end();
+                            //通过base64返回对应的图片
+                            res.writeHead(200, {'Content-Type': 'image/' + ext});
+                            res.end(data, 'binary');
                         } else if (ext === 'css') {
                             res.writeHead(200, {
                                 'Content-Type': 'text/css'
