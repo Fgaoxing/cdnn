@@ -76,14 +76,26 @@ function getGithubData(owner, repo, branch, path) {
                             let old = AV.Object.createWithoutData('gh', results[0].id);
                             old.destroy();
                             gh.save().then(function () {
-                                let buffer = new Buffer(data.content, 'base64').toString();
-                                resolve(buffer);
+                                var ext = path.split('.')[path.split('.').length - 1];
+                                if (ext === 'png' || ext === 'jpg' || ext === 'jpeg' || ext === 'gif') {
+                                    resolve(results[0].get('file'));
+                                } else {//解析数据base64
+                                    var data = results[0].get('file');
+                                    var buffer = new Buffer(data, 'base64');
+                                    resolve(buffer.toString());
+                                }
                             });
                         } else {
                             //如果没有数据，则创建
                             gh.save().then(function () {
-                                let buffer = new Buffer(data.content, 'base64').toString();
-                                resolve(buffer);
+                                var ext = path.split('.')[path.split('.').length - 1];
+                                if (ext === 'png' || ext === 'jpg' || ext === 'jpeg' || ext === 'gif') {
+                                    resolve(results[0].get('file'));
+                                } else {//解析数据base64
+                                    var data = results[0].get('file');
+                                    var buffer = new Buffer(data, 'base64');
+                                    resolve(buffer.toString());
+                                }
                             });
                         }
                     });
@@ -120,10 +132,14 @@ function getLcData(owner, repo, branch, path) {
                         reject(e);
                     });
                 } else {
-                    //解析数据base64
-                    var data = results[0].get('file');
-                    var buffer = new Buffer(data, 'base64');
-                    resolve(buffer.toString());
+                    var ext = path.split('.')[path.split('.').length - 1];
+                    if (ext === 'png' || ext === 'jpg' || ext === 'jpeg' || ext === 'gif') {
+                        resolve(results[0].get('file'));
+                    } else {//解析数据base64
+                        var data = results[0].get('file');
+                        var buffer = new Buffer(data, 'base64');
+                        resolve(buffer.toString());
+                    }
                 }
             } else {
                 //如果没有数据，则创建
