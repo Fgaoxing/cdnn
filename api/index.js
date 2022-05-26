@@ -167,16 +167,28 @@ http.createServer(function (req, res) {
                             });
                             res.write(data);
                             res.end();
+                        } else if (ext === 'css') {
+                            res.writeHead(200, {
+                                'Content-Type': 'text/css'
+                            });
+                            res.write(data);
+                            res.end();
+                        } else if (ext === 'js') {
+                            res.writeHead(200, {
+                                'Content-Type': 'text/javascript;charset=utf-8'
+                            });
+                            res.write(data);
+                            res.end();
                         } else {
                             res.writeHead(200, {
-                                'Content-Type': 'text/html'
+                                'Content-Type': 'text/html;charset=utf-8'
                             });
                             res.write(data);
                             res.end();
                         }
                     } else {
                         res.writeHead(200, {
-                            'Content-Type': 'text/plain'
+                            'Content-Type': 'text/plain;charset=utf-8'
                         });
                         res.write(data);
                         res.end();
