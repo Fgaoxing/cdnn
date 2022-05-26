@@ -158,11 +158,29 @@ http.createServer(function (req, res) {
                 var path = urlArr.slice(2).join('/');//末尾的如果是/，则去掉
                 //获取lc上的数据
                 getLcData(owner, repo, branch, path).then(function (data) {
-                    res.writeHead(200, {
-                        'Content-Type': 'text/html;charset=utf-8'
-                    });
-                    res.write(data);
-                    res.end();
+                    //判断是否是图片
+                    if (path.split('.').length > 1) {
+                        var ext = path.split('.')[path.split('.').length - 1];
+                        if (ext === 'png' || ext === 'jpg' || ext === 'jpeg' || ext === 'gif') {
+                            res.writeHead(200, {
+                                'Content-Type': 'image/' + ext
+                            });
+                            res.write(data);
+                            res.end();
+                        } else {
+                            res.writeHead(200, {
+                                'Content-Type': 'text/plain'
+                            });
+                            res.write(data);
+                            res.end();
+                        }
+                    } else {
+                        res.writeHead(200, {
+                            'Content-Type': 'text/plain'
+                        });
+                        res.write(data);
+                        res.end();
+                    }
                 }).catch(function (e) {
                     res.writeHead(404, {
                         'Content-Type': 'text/html;charset=utf-8'
