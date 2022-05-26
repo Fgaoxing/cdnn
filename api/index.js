@@ -179,14 +179,14 @@ http.createServer(function (req, res) {
                         var ext = path.split('.')[path.split('.').length - 1];
                         if (ext === 'png' || ext === 'jpg' || ext === 'jpeg' || ext === 'gif') {
                             //通过data:image/png;base64,xxxxxx的方式返回图片
+                            //解决输出图片为空
+                            var base64 = new Buffer(data).toString('base64');
                             res.writeHead(200, {
-                                'Content-Type': 'image/' + ext
+                                'Content-Type': 'image/' + ext,
+                                'Content-Length': base64.length
                             });
-                            //原格式为base64，需要转换为buffer
-                            var buffer = new Buffer(data, 'base64');
-                            console.log('buffer', buffer);
-                            res.end(buffer.toString(), 'binary');
-                        } else if (ext === 'css') {
+                            res.end(base64);
+                     } else if (ext === 'css') {
                             res.writeHead(200, {
                                 'Content-Type': 'text/css'
                             });
