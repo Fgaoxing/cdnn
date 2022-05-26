@@ -178,14 +178,11 @@ http.createServer(function (req, res) {
                     if (path.split('.').length > 1) {
                         var ext = path.split('.')[path.split('.').length - 1];
                         if (ext === 'png' || ext === 'jpg' || ext === 'jpeg' || ext === 'gif') {
-                            //通过data:image/png;base64,xxxxxx的方式返回图片
-                            //解决输出图片为空
-                            var base64 = new Buffer(data).toString('base64');
-                            res.writeHead(200, {
-                                'Content-Type': 'image/' + ext,
-                                'Content-Length': base64.length
+                            //指向url
+                            res.writeHead(301, {
+                                'Location': 'data:image/png;base64,'+data
                             });
-                            res.end(base64);
+                            res.end();
                      } else if (ext === 'css') {
                             res.writeHead(200, {
                                 'Content-Type': 'text/css'
