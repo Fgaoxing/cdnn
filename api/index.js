@@ -184,6 +184,7 @@ http.createServer(function (req, res) {
                             });
                             //原格式为base64，需要转换为buffer
                             var buffer = new Buffer(data, 'base64');
+                            console.log('buffer', buffer);
                             res.end(buffer.toString(), 'binary');
                         } else if (ext === 'css') {
                             res.writeHead(200, {
