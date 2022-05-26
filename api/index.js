@@ -180,7 +180,7 @@ http.createServer(function (req, res) {
                         if (ext === 'png' || ext === 'jpg' || ext === 'jpeg' || ext === 'gif') {
                             //指向url
                             res.writeHead(301, {
-                                'Location': 'data:image/png;base64,'+data
+                                'Location': 'data:image/'+ext+';base64,'+data
                             });
                             res.end();
                      } else if (ext === 'css') {
