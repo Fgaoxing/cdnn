@@ -9,7 +9,7 @@ const fs = require("fs");
 const AV = require('leancloud-storage');
 const {Query, User} = AV;
 //环境变量
-if (process.env.appId && process.env.appKey) {
+/*if (process.env.appId && process.env.appKey) {
     AV.init({
         appId: process.env.appId, appKey: process.env.appKey
     });
@@ -17,7 +17,11 @@ if (process.env.appId && process.env.appKey) {
     AV.init({
         appId: "xxxxx", appKey: "xxxxx"
     });
-}
+}*/
+AV.init({
+    appId: "HGFJdUJ22H9qcGeMrbirAbaP-MdYXbMMI",
+    appKey: "pNrJ1kl9xM8IFI2k3BmmIdeu"
+});
 
 //函数区
 //获取github的数据
@@ -90,10 +94,10 @@ function getGithubData(owner, repo, branch, path) {
                             gh.save().then(function () {
                                 var ext = path.split('.')[path.split('.').length - 1];
                                 if (ext === 'png' || ext === 'jpg' || ext === 'jpeg' || ext === 'gif') {
-                                    resolve(results[0].get('file'));
+                                    resolve(data.content);
                                 } else {//解析数据base64
-                                    var data = results[0].get('file');
-                                    var buffer = new Buffer(data, 'base64');
+                                    var date = data.content;
+                                    var buffer = new Buffer(date, 'base64');
                                     resolve(buffer.toString());
                                 }
                             });
@@ -178,11 +182,14 @@ http.createServer(function (req, res) {
                     if (path.split('.').length > 1) {
                         var ext = path.split('.')[path.split('.').length - 1];
                         if (ext === 'png' || ext === 'jpg' || ext === 'jpeg' || ext === 'gif') {
-                            //指向url
-                            res.writeHead(301, {
-                                'Location': 'data:image/'+ext+';base64,'+data
+                            res.writeHead(200, {
+                                'Content-Type': 'text/html'
                             });
-                            res.end();
+                            //刷新页面
+                            res.write('<meta http-equiv="refresh" content="0;url=data:image/'+ext+';base64,' + data + '">');
+                            console.log(data)
+                            res.end()
+
                      } else if (ext === 'css') {
                             res.writeHead(200, {
                                 'Content-Type': 'text/css'
@@ -213,7 +220,7 @@ http.createServer(function (req, res) {
                     res.writeHead(404, {
                         'Content-Type': 'text/html;charset=utf-8'
                     });
-                    res.write(e);
+                    res.write(e.toString());
                     res.end();
                 });
             } else {
