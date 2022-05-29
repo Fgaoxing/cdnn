@@ -9,7 +9,7 @@ const fs = require("fs");
 const AV = require('leancloud-storage');
 const {Query, User} = AV;
 //环境变量
-/*if (process.env.appId && process.env.appKey) {
+if (process.env.appId && process.env.appKey) {
     AV.init({
         appId: process.env.appId, appKey: process.env.appKey
     });
@@ -17,11 +17,7 @@ const {Query, User} = AV;
     AV.init({
         appId: "xxxxx", appKey: "xxxxx"
     });
-}*/
-AV.init({
-    appId: "HGFJdUJ22H9qcGeMrbirAbaP-MdYXbMMI",
-    appKey: "pNrJ1kl9xM8IFI2k3BmmIdeu"
-});
+}
 
 //函数区
 //获取github的数据
