@@ -311,8 +311,7 @@ http.createServer(function (req, res) {
             if (urlArr.length >= 2) {
                 //获取package，version，file
                 var package = urlArr[0];
-                var version = urlArr[1];
-                var file = urlArr.slice(2).join('/');//末尾的如果是/，则去掉
+                var file = urlArr.slice(1).join('/');//末尾的如果是/，则去掉
                 //获取npm的数据
                 getNpmData(package,file).then(function (data) {
                     res.writeHead(200, {
