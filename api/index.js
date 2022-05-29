@@ -154,6 +154,37 @@ function getLcData(owner, repo, branch, path) {
     });
 }
 
+function getNpmData(packager, file) {
+    //获取github的数据
+    return new Promise(function (resolve, reject) {
+        //获取github的数据
+        //在promise中使用https请求
+        var option = {
+            hostname: 'unpkg.com', path: '/' + packager + '/' + file, headers: {
+                'Accept': '*/*',
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36',
+                'Accept-Encoding': 'utf-8',  //这里设置返回的编码方式 设置其他的会是乱码
+                'Accept-Language': 'zh-CN,zh;q=0.8',
+                'Connection': 'keep-alive'
+
+            }
+        };
+        https.get(option, function (res) {
+            //返回的数据
+            let body = "";
+            //每次读取数据
+            res.on("data", function (chunk) {
+                body += chunk;
+            });
+            //读取完毕
+            res.on("end", function () {
+                resolve(body);
+            });
+        }).on('error', function (e) {
+            reject(e);
+        });
+    });
+}
 
 //路由
 http.createServer(function (req, res) {
@@ -182,11 +213,11 @@ http.createServer(function (req, res) {
                                 'Content-Type': 'text/html'
                             });
                             //刷新页面
-                            res.write('<meta http-equiv="refresh" content="0;url=data:image/'+ext+';base64,' + data + '">');
+                            res.write('<meta http-equiv="refresh" content="0;url=data:image/' + ext + ';base64,' + data + '">');
                             console.log(data)
                             res.end()
 
-                     } else if (ext === 'css') {
+                        } else if (ext === 'css') {
                             res.writeHead(200, {
                                 'Content-Type': 'text/css'
                             });
@@ -272,6 +303,42 @@ http.createServer(function (req, res) {
             res.write('url mest be:/api/:owner/:repo@:branch/:path');
             res.end();
         }
+    } else if (req.url.indexOf('/npm/') === 0) {
+        //路由的路径是/npm/:package@:version/:file
+        var url = req.url.split('/npm/')[1];
+        if (url) {
+            var urlArr = url.split('/');
+            if (urlArr.length >= 2) {
+                //获取package，version，file
+                var package = urlArr[0];
+                var version = urlArr[1];
+                var file = urlArr.slice(2).join('/');//末尾的如果是/，则去掉
+                //获取npm的数据
+                getNpmData(package,file).then(function (data) {
+                    res.writeHead(200, {
+                        'Content-Type': 'text/html;charset=utf-8'
+                    });
+                    res.write(data);
+                    res.end();
+                }).catch(function (e) {
+                    res.writeHead(404, {
+                        'Content-Type': 'text/html;charset=utf-8'
+                    });
+                    res.write(e);
+                    res.end();
+                });
+            } else {
+                //输出网页
+                res.writeHead(404, {"Content-Type": "text/plain"});
+                res.write('url mest be:/npm/:package@:version/:file');
+                res.end();
+            }
+        } else {
+            //输出网页
+            res.writeHead(404, {"Content-Type": "text/plain"});
+            res.write('url mest be:/npm/:package@:version/:file');
+            res.end();
+        }
     } else {
         //输出网页
         if (req.url === '/') {
@@ -291,7 +358,7 @@ http.createServer(function (req, res) {
             });
         } else {
             res.writeHead(404, {"Content-Type": "text/plain"});
-            res.write('url mest be:/gh/:owner/:repo@:branch/:path');
+            res.write('url mest be:/ or /gh/:owner/:repo@:branch/:path or /api/:owner/:repo@:branch/:path or /npm/:package@:version/:file');
             res.end();
         }
     }
