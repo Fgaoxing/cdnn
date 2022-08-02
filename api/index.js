@@ -190,7 +190,7 @@ function getNpmData(packager, file) {
 //路由
 http.createServer(function (req, res) {
     console.log(req.url)
-    req.url=url.parse(req.url).pathname
+    //req.url=url.parse(req.url).pathname
     //路由的路径是/gh/:owner/:repo@:branch/:path
     if (req.url.indexOf('/gh/') === 0) {
         var url = req.url.split('/gh/')[1];
