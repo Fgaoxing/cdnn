@@ -318,7 +318,7 @@ http.createServer(function (req, res) {
                 //获取npm的数据
                 getNpmData(package,file).then(function (data) {
                     res.writeHead(200, {
-                        'Content-Type': 'text/html;charset=utf-8'
+                        'Content-Type': 'text/plain;charset=utf-8'
                     });
                     res.write(data);
                     res.end();
