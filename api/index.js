@@ -212,7 +212,7 @@ http.createServer(function (req, res) {
                     if (path.split('.').length > 1) {
                         var ext = path.split('.')[path.split('.').length - 1];
                         if (ext === 'png' || ext === 'jpg' || ext === 'jpeg' || ext === 'gif') {
-                            res.writeHead(301, {'Location': 'https://raw.githubusercontent.com/'+owner+'/'+repo+'/'+branch+'/'path});
+                            res.writeHead(301, {'Location': 'https://raw.githubusercontent.com/'+owner+'/'+repo+'/'+branch+'/'+path});
                             res.end()
                         } else if (ext === 'css') {
                             res.writeHead(200, {
