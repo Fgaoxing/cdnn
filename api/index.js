@@ -190,7 +190,7 @@ function getNpmData(packager, file) {
 //路由
 http.createServer(function (req, res) {
     console.log(req.url)
-    //req.url=url.parse(req.url).pathname
+    req.url=url.parse(req.url).pathname
     //路由的路径是/gh/:owner/:repo@:branch/:path
     if (req.url.indexOf('/gh/') === 0) {
         var url = req.url.split('/gh/')[1];
@@ -212,14 +212,8 @@ http.createServer(function (req, res) {
                     if (path.split('.').length > 1) {
                         var ext = path.split('.')[path.split('.').length - 1];
                         if (ext === 'png' || ext === 'jpg' || ext === 'jpeg' || ext === 'gif') {
-                            res.writeHead(200, {
-                                'Content-Type': 'text/html'
-                            });
-                            //刷新页面
-                            res.write('<meta http-equiv="refresh" content="0;url=data:image/' + ext + ';base64,' + data + '">');
-                            console.log(data)
+                            res.writeHead(301, {'Location': 'https://raw.githubusercontent.com/'+owner+'/'+repo+'/'+branch+'/'path});
                             res.end()
-
                         } else if (ext === 'css') {
                             res.writeHead(200, {
                                 'Content-Type': 'text/css'
